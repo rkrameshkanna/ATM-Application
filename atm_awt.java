@@ -1,9 +1,10 @@
 import java.util.Scanner;
-import java.nio.file.Files;
 import java.io.*;
 import java.nio.file.*;
 import java.awt.*;
 import javax.swing.*;
+
+import sqlpack.sqlclass;
 
 public class atm_awt extends JFrame {
     int position = 0, open = 1;
@@ -16,73 +17,15 @@ public class atm_awt extends JFrame {
     Double bal, bal1, curbal;
     JButton bu1, bu2, bu3, bu4, bu5, bu6;
 
+    sqlclass newobj=new sqlclass();
+
     public atm_awt() throws FileNotFoundException {
         setLayout(new BorderLayout());
-        File obj1 = new File("file1.txt");
-        Scanner sc1 = new Scanner(obj1);
-        File obj2 = new File("file2.txt");
-        Scanner sc2 = new Scanner(obj2);
-        File obj3 = new File("file3.txt");
-        //Scanner sc3 = new Scanner(obj3);
-        File obj4 = new File("file4.txt");
-        //Scanner sc4 = new Scanner(obj4);
-        File obj5 = new File("file5.txt");
-        //Scanner sc5 = new Scanner(obj5);
-        File obj6 = new File("file6.txt");
-        //Scanner sc6 = new Scanner(obj6);
-        File obj7 = new File("file7.txt");
-        //Scanner sc7 = new Scanner(obj7);
-
 
         bu6 = new JButton("EXIT");
         bu6.addActionListener((l) -> {
             System.exit(0);
         });
-        /*JButton exit1 = new JButton("EXIT");
-        exit1.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit2 = new JButton("EXIT");
-        exit2.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit3 = new JButton("EXIT");
-        exit3.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit4 = new JButton("EXIT");
-        exit4.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit5 = new JButton("EXIT");
-        exit5.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit6 = new JButton("EXIT");
-        exit6.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit7 = new JButton("EXIT");
-        exit7.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit8 = new JButton("EXIT");
-        exit8.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit9 = new JButton("EXIT");
-        exit9.addActionListener((l) -> {
-            System.exit(0);
-        });
-        JButton exit10 = new JButton("EXIT");
-        exit10.addActionListener((l) -> {
-            System.exit(0);
-        });*/
-
-        // try {
-        // } catch (FileNotFoundException e) {
-        // System.out.println("File Error");
-        // }
         JPanel p1 = new JPanel();
         p1.setLayout(new FlowLayout());
         title = new JLabel("ATM");
@@ -107,22 +50,16 @@ public class atm_awt extends JFrame {
 
         withdraw.add(savingsw);
         withdraw.add(currentw);
-        
-        //withdraw.add(exit1);
-    
-        //amtpan.add(exit2);
         finwith.add(label1);
         finwith.add(label2);
     
-        //finwith.add(bu6);
         savingsw.addActionListener((l) -> {
             setContentPane(amtpan);
             this.revalidate();
             savornot = "Savings";
             try {
-                temp1 = Files.readAllLines(Paths.get("file7.txt")).get(position);
-                //System.out.println(temp1);
-            } catch (IOException e) {
+                temp1=newobj.query_results("account_type", username);
+            } catch (Exception e) {
                 System.out.println(e);
             }
             if (temp1.equals(savornot)) {
@@ -134,33 +71,17 @@ public class atm_awt extends JFrame {
                     setContentPane(finwith);
                     this.revalidate();
                     try {
-                        bal = Double.parseDouble(Files.readAllLines(Paths.get("file6.txt")).get(position));
-                        //System.out.println(temp1);
-                    } catch (IOException e) {
+                        
+                        bal=Double.parseDouble(newobj.query_results("balance", username));
+                    } catch (Exception e) {
                         System.out.println(e);
                     }
                     bal1 = Double.parseDouble(getamount.getText());
                     if (bal > bal1) {
-                        //System.out.println("hello");
                         curbal = bal - bal1;
                         try {
-                            String filePath = "file6.txt";
-                            Scanner sc = new Scanner(new File(filePath));
-                            StringBuffer buffer = new StringBuffer();
-                            while (sc.hasNextLine()) {
-                                buffer.append(sc.nextLine() + System.lineSeparator());
-                            }
-                            String fileContents = buffer.toString();
-                            sc.close();
-                            String oldLine = String.valueOf(bal);
-                            String newLine = String.valueOf(curbal);
-                            //System.out.println(oldLine);
-                            //System.out.println(newLine);
-                            fileContents = fileContents.replaceAll(oldLine, newLine);
-                            FileWriter writer = new FileWriter(filePath);
-                            writer.append(fileContents);
-                            writer.flush();
-                        } catch (IOException e) {
+                            newobj.update_values("balance",String.valueOf(curbal),username);
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         label1.setText("COLLECT THE CASH");
@@ -176,7 +97,7 @@ public class atm_awt extends JFrame {
             }
             else{
                 JLabel inacc=new JLabel("INVALID ACCOUNT TYPE");
-                //this.revalidate();
+                this.revalidate();
                 amtpan.add(inacc);
             }
 
@@ -187,9 +108,8 @@ public class atm_awt extends JFrame {
             this.revalidate();
             savornot = "Current";
             try {
-                temp1 = Files.readAllLines(Paths.get("file7.txt")).get(position);
-                //System.out.println(temp1);
-            } catch (IOException e) {
+                temp1=newobj.query_results("account_type", username);
+            } catch (Exception e) {
                 System.out.println(e);
             }
             if (temp1.equals(savornot)) {
@@ -201,33 +121,16 @@ public class atm_awt extends JFrame {
                     setContentPane(finwith);
                     this.revalidate();
                     try {
-                        bal = Double.parseDouble(Files.readAllLines(Paths.get("file6.txt")).get(position));
-                        //System.out.println(temp1);
-                    } catch (IOException e) {
+                        bal=Double.parseDouble(newobj.query_results("balance", username));
+                    } catch (Exception e) {
                         System.out.println(e);
                     }
                     bal1 = Double.parseDouble(getamount.getText());
-                    //System.out.println(bal1);
-                    //System.out.println(bal);
                     if (bal > bal1) {
-                        //System.out.println("hello");
                         curbal = bal - bal1;
                         try {
-                            String filePath = "file6.txt";
-                            Scanner sc = new Scanner(new File(filePath));
-                            StringBuffer buffer = new StringBuffer();
-                            while (sc.hasNextLine()) {
-                                buffer.append(sc.nextLine() + System.lineSeparator());
-                            }
-                            String fileContents = buffer.toString();
-                            sc.close();
-                            String oldLine = String.valueOf(bal);
-                            String newLine = String.valueOf(curbal);
-                            fileContents = fileContents.replaceAll(oldLine, newLine);
-                            FileWriter writer = new FileWriter(filePath);
-                            writer.append(fileContents);
-                            writer.flush();
-                        } catch (IOException e) {
+                            newobj.update_values("balance",String.valueOf(curbal),username);
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         label1.setText("COLLECT THE CASH");
@@ -263,22 +166,16 @@ public class atm_awt extends JFrame {
         deposit.add(savingsd);
         deposit.add(currentd);
     
-        //deposit.add(exit3);
-    
-        //amtpan1.add(exit4);
         finwith1.add(label11);
         finwith1.add(label12);
-    
-        //finwith1.add(exit5);
 
         savingsd.addActionListener((l) -> {
             setContentPane(amtpan1);
             this.revalidate();
             savornot = "Savings";
             try {
-                temp1 = Files.readAllLines(Paths.get("file7.txt")).get(position);
-                //System.out.println(temp1);
-            } catch (IOException e) {
+                temp1=newobj.query_results("account_type", username);
+            } catch (Exception e) {
                 System.out.println(e);
             }
             if (temp1.equals(savornot)) {
@@ -290,36 +187,20 @@ public class atm_awt extends JFrame {
                     setContentPane(finwith1);
                     this.revalidate();
                     try {
-                        bal = Double.parseDouble(Files.readAllLines(Paths.get("file6.txt")).get(position));
-                        //System.out.println(temp1);
-                    } catch (IOException e) {
+                        bal=Double.parseDouble(newobj.query_results("balance", username));
+                    } catch (Exception e) {
                         System.out.println(e);
                     }
                     bal1 = Double.parseDouble(getamount1.getText());
-                    //if (bal > bal1) {
-                        //System.out.println("hello");
-                        curbal = bal1 + bal;
-                        try {
-                            String filePath = "file6.txt";
-                            Scanner sc = new Scanner(new File(filePath));
-                            StringBuffer buffer = new StringBuffer();
-                            while (sc.hasNextLine()) {
-                                buffer.append(sc.nextLine() + System.lineSeparator());
-                            }
-                            String fileContents = buffer.toString();
-                            sc.close();
-                            String oldLine = String.valueOf(bal);
-                            String newLine = String.valueOf(curbal);
-                            fileContents = fileContents.replaceAll(oldLine, newLine);
-                            FileWriter writer = new FileWriter(filePath);
-                            writer.append(fileContents);
-                            writer.flush();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        label11.setText("THE CASH DEPOSITE SUCCUSSFULLY");
-                        label12.setText("CURRENT BALANCE=" + curbal);
-                    //}
+                    curbal = bal1 + bal;
+                    try {
+                        newobj.update_values("balance",String.valueOf(curbal),username);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    label11.setText("THE CASH DEPOSITE SUCCUSSFULLY");
+                    this.revalidate();
+                    label12.setText("CURRENT BALANCE=" + curbal);
                 });
             }
             else{
@@ -335,9 +216,8 @@ public class atm_awt extends JFrame {
             this.revalidate();
             savornot = "Current";
             try {
-                temp1 = Files.readAllLines(Paths.get("file7.txt")).get(position);
-                //System.out.println(temp1);
-            } catch (IOException e) {
+                temp1=newobj.query_results("account_type", username);
+            } catch (Exception e) {
                 System.out.println(e);
             }
             if (temp1.equals(savornot)) {
@@ -349,36 +229,20 @@ public class atm_awt extends JFrame {
                     setContentPane(finwith1);
                     this.revalidate();
                     try {
-                        bal = Double.parseDouble(Files.readAllLines(Paths.get("file6.txt")).get(position));
-                        //System.out.println(temp1);
-                    } catch (IOException e) {
+                        bal=Double.parseDouble(newobj.query_results("balance", username));
+                    } catch (Exception e) {
                         System.out.println(e);
                     }
                     bal1 = Double.parseDouble(getamount1.getText());
-                    //if (bal > bal1) {
-                        //System.out.println("hello");
-                        curbal = bal1 + bal;
-                        try {
-                            String filePath = "file6.txt";
-                            Scanner sc = new Scanner(new File(filePath));
-                            StringBuffer buffer = new StringBuffer();
-                            while (sc.hasNextLine()) {
-                                buffer.append(sc.nextLine() + System.lineSeparator());
-                            }
-                            String fileContents = buffer.toString();
-                            sc.close();
-                            String oldLine = String.valueOf(bal);
-                            String newLine = String.valueOf(curbal);
-                            fileContents = fileContents.replaceAll(oldLine, newLine);
-                            FileWriter writer = new FileWriter(filePath);
-                            writer.append(fileContents);
-                            writer.flush();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        label11.setText("THE CASH DEPOSITE SUCCUSSFULLY");
-                        label12.setText("CURRENT BALANCE=" + curbal);
-                    //}
+                    curbal = bal1 + bal;
+                    try {
+                        newobj.update_values("balance",String.valueOf(curbal),username);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    label11.setText("THE CASH DEPOSITE SUCCUSSFULLY");
+                    this.revalidate();
+                    label12.setText("CURRENT BALANCE=" + curbal);
                 });
             }
             else{
@@ -396,8 +260,6 @@ public class atm_awt extends JFrame {
         JLabel bal = new JLabel();
         balance.add(bal, BorderLayout.CENTER);
     
-      //  balance.add(bu6, BorderLayout.SOUTH);
-       // balance.add(exit6);
 
         // panel 6 change pin
         JPanel pchange = new JPanel();
@@ -416,11 +278,7 @@ public class atm_awt extends JFrame {
         pchange.add(num);
         pchange.add(phone);
         pchange.add(toinner);
-    
-        //pchange.add(exit7);
 
-    
-        //inner.add(exit8);
         toinner.addActionListener((al) -> {
             setContentPane(inner);
             this.revalidate();
@@ -435,32 +293,16 @@ public class atm_awt extends JFrame {
                 inner.add(noname);
                 noname.addActionListener((ale) -> {
                 try {
-                    temp1 = Files.readAllLines(Paths.get("file2.txt")).get(position);
-                    //System.out.println(temp1);
-                } catch (IOException e) {
+                    temp1=newobj.query_results("password", username);
+                } catch (Exception e) {
                     System.out.println(e);
                 }
 
 
             String newnum = pinconf.getText();
-            // System.out.println(newnum);
-            // System.out.println(temp1);
             try {
-                String filePath = "file2.txt";
-                Scanner sc = new Scanner(new File(filePath));
-                StringBuffer buffer = new StringBuffer();
-                while (sc.hasNextLine()) {
-                    buffer.append(sc.nextLine() + System.lineSeparator());
-                }
-                String fileContents = buffer.toString();
-                sc.close();
-                String oldLine = temp1;
-                String newLine = newnum;// String.valueOf(newnum);
-                fileContents = fileContents.replaceAll(oldLine, newLine);
-                FileWriter writer = new FileWriter(filePath);
-                writer.append(fileContents);
-                writer.flush();
-            } catch (IOException e) {
+                newobj.update_values("password",String.valueOf(newnum),username);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             inner.remove(noname);
@@ -489,10 +331,6 @@ public class atm_awt extends JFrame {
         nchange.add(acc);
         nchange.add(accno);
         nchange.add(goinner);
-    
-        //nchange.add(exit9);
-    
-        //mobinner.add(exit10);
 
         // Panel 2
         JPanel pan2 = new JPanel();
@@ -508,13 +346,10 @@ public class atm_awt extends JFrame {
             this.revalidate();
             //withdraw.repaint();
             try {
-                temp = Files.readAllLines(Paths.get("file7.txt")).get(position);
-            } catch (IOException e) {
+                temp=newobj.query_results("account_type", username);
+            } catch (Exception e) {
                 System.out.println(e);
             }
-            //if (temp.equals(savornot)) {
-                // ..
-            //}
             //this.repaint(); 
         });
 
@@ -524,13 +359,10 @@ public class atm_awt extends JFrame {
             this.revalidate();
             String temp = "";
             try {
-                temp = Files.readAllLines(Paths.get("file7.txt")).get(position);
-            } catch (IOException e) {
+                temp=newobj.query_results("account_type", username);
+            } catch (Exception e) {
                 System.out.println(e);
             }
-            //if (temp.equals(savornot)) {
-                // ..
-            //}
 
         });
 
@@ -540,8 +372,8 @@ public class atm_awt extends JFrame {
 
             String temp = "";
             try {
-                temp = Files.readAllLines(Paths.get("file6.txt")).get(position);
-            } catch (IOException e) {
+                temp=newobj.query_results("balance", username);
+            } catch (Exception e) {
                 System.out.println(e);
             }
 
@@ -554,9 +386,8 @@ public class atm_awt extends JFrame {
             this.revalidate();
 
             try {
-                temp = Files.readAllLines(Paths.get("file5.txt")).get(position);
-                //System.out.println(temp);
-            } catch (IOException e) {
+                temp=newobj.query_results("phone_number", username);
+            } catch (Exception e) {
                 System.out.println(e);
             }
 
@@ -571,17 +402,12 @@ public class atm_awt extends JFrame {
                 setContentPane(mobinner);
                 this.revalidate();
                 accnum = accno.getText();
-                //System.out.println("hgfdserty");
                 try {
-                    temp2 = Files.readAllLines(Paths.get("file3.txt")).get(position);
-                    System.out.println(temp2);
-                } catch (IOException e) {
+                    temp2=newobj.query_results("account_number", username);
+                } catch (Exception e) {
                     System.out.println(e);
                 }
                 
-                //System.out.println(temp2);
-                //System.out.println(accnum);
-
                 if (temp2.equals(accnum)) {
                     mobinner.add(newmob);
                     mobinner.add(mobnew);
@@ -591,32 +417,18 @@ public class atm_awt extends JFrame {
                 mobbut.addActionListener((all) -> {
                         String temp1 = "";
                         try {
-                            temp1 = Files.readAllLines(Paths.get("file5.txt")).get(position);
-                        } catch (IOException e) {
+                            temp1=newobj.query_results("phone_number", username);
+                        } catch (Exception e) {
                             System.out.println(e);
                         }
                         String newnum = mobnew.getText();
-                        //System.out.println(temp1);
-                        //System.out.println(newnum);
                         try {
-                            String filePath = "file5.txt";
-                            Scanner sc = new Scanner(new File(filePath));
-                            StringBuffer buffer = new StringBuffer();
-                            while (sc.hasNextLine()) {
-                                buffer.append(sc.nextLine() + System.lineSeparator());
-                            }
-                            String fileContents = buffer.toString();
-                            sc.close();
-                            String oldLine = temp1;
-                            String newLine = String.valueOf(newnum);
-                            fileContents = fileContents.replaceAll(oldLine, newLine);
-                            FileWriter writer = new FileWriter(filePath);
-                            writer.append(fileContents);
-                            writer.flush();
-                        } catch (IOException e) {
+                            newobj.update_values("phone_number",String.valueOf(newnum),username);
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         mobinner.remove(mobbut);
+                        this.revalidate();
                         chnum.setText("MOBILE NUMBER CHANGED SUCCESFULLY!");
                 });
             }
@@ -643,34 +455,18 @@ public class atm_awt extends JFrame {
             this.pinnum = pin.getText();
 
             int a=0;
-            while (sc1.hasNextLine() && sc2.hasNextLine()) {
-                if ((username.equals(sc1.nextLine()))) {
-                    a=1;
-                    break;
-                }
-                position++;
-            }
-
-            String tempuser = "", temppin = "";
-            try {
-                tempuser = Files.readAllLines(Paths.get("file1.txt")).get(position);
-                temppin = Files.readAllLines(Paths.get("file2.txt")).get(position);
-            } catch (IOException ie) {
-                System.out.println(ie);
-            } catch (IndexOutOfBoundsException aoe) {
-                JOptionPane.showMessageDialog(this, "No user found", "Information", JOptionPane.INFORMATION_MESSAGE);
-            }
+            
+            a=newobj.finduser(username, pinnum);
+            
             if(a==1)
             {
-                if (tempuser.equals(username) && temppin.equals(pinnum) && open == 1) {
-                    setContentPane(pan2);
-                    this.revalidate();
-                    try {
-                        String name = Files.readAllLines(Paths.get("file4.txt")).get(position);
-                        namelab.setText("WELCOME : " + name);
-                    } catch (IOException ie) {
-                        System.out.println(ie);
-                    }
+                setContentPane(pan2);
+                this.revalidate();
+                try {
+                    String name=newobj.query_results("name", username);
+                    namelab.setText("WELCOME : " + name);
+                } catch (Exception ie) {
+                    System.out.println(ie);
                 }
             }
             else{
