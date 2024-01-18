@@ -1,4 +1,4 @@
-     #ATM - Application:
+     ATM - Application:
 
 Developed an ATM application using Java with AWT (Abstract Window Toolkit) for the graphical user interface and MySQL database for data storage.
 
@@ -44,13 +44,13 @@ JDBC for Java-MySQL database connectivity.
 
 The application version has been tracked, and the code has been organized to facilitate future updates and maintenance.
 
-    #Database creativity:  
+    Database creativity:  
 
 1.Download MySQL from offical website.
 
 2.After downling the MySQL create a database that has been shown in MySql-database folder.
 
-    #Steps to compile and run the program:
+    Steps to compile and run the program:
 
 1.This Command Will Give Us a Class File
 
