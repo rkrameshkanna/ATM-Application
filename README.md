@@ -1,8 +1,8 @@
-ATM - Application:
+     ATM - Application:
 
 Developed an ATM application using Java with AWT (Abstract Window Toolkit) for the graphical user interface and MySQL database for data storage.
 
-Functionalities:
+    Functionalities:
 
 Implemented features such as cash withdrawal, cash deposit, balance inquiry, and PIN and mobile number change.
 
@@ -12,45 +12,45 @@ Utilized SQL queries to interact with the MySQL database for user authentication
 
 Ensured user security by using parameterized queries and preventing SQL injection vulnerabilities.
 
-Graphical User Interface (GUI):
+    Graphical User Interface (GUI):
 
 Designed a user-friendly GUI with buttons and panels for various functionalities.
 Utilized Java's AWT and Swing libraries to create interactive and responsive components.
 
-Database Interaction:
+    Database Interaction:
 
 Established a connection to the MySQL database using JDBC (Java Database Connectivity).
 
 Implemented methods to perform user authentication, retrieve user data, and update user information in the database.
 
-Error Handling:
+    Error Handling:
 
 Implemented error handling to provide informative messages to the user in case of invalid inputs or database errors.
 
-Code Organization:
+    Code Organization:
 
 Structured the code into classes and methods, promoting modularity and readability.
 
 Separated the SQL-related functionalities into a dedicated class (sqlclass.java) for better organization.
 
-Technology Stack:
+    Technology Stack:
 
 Java (AWT, Swing) for the frontend development.
 
 MySQL for the backend database.
 JDBC for Java-MySQL database connectivity.
 
-Version Control:
+    Version Control:
 
 The application version has been tracked, and the code has been organized to facilitate future updates and maintenance.
 
-Database creativity:  
+    Database creativity:  
 
 1.Download MySQL from offical website.
 
 2.After downling the MySQL create a database that has been shown in MySql-database folder.
 
-Steps to compile and run the program:
+    Steps to compile and run the program:
 
 1.This Command Will Give Us a Class File
 
